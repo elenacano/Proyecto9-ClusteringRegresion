@@ -139,7 +139,7 @@ class Exploracion:
             fig.delaxes(axes[-1])
         plt.tight_layout()
     
-    def visualizar_categoricas(self):
+    def visualizar_categoricas(self, figsize=(15, 10)):
         """
         Genera gráficos de barras (count plots) para las variables categóricas del DataFrame.
 
@@ -153,7 +153,7 @@ class Exploracion:
 
         if len(categorical_columns) > 0:
             try:
-                _, axes = plt.subplots(nrows=len(categorical_columns), ncols=1, figsize=(15, 5 * len(categorical_columns)))
+                _, axes = plt.subplots(nrows=len(categorical_columns), ncols=1, figsize=figsize)
                 axes = axes.flat
                 plt.suptitle("Distribución de las variables categóricas", fontsize=24)
                 for indice, columna in enumerate(categorical_columns):
@@ -560,7 +560,7 @@ class Clustering:
 
         # Iterar sobre diferentes combinaciones de eps y min_samples
         for eps in eps_values:
-            for min_samples in min_samples_values:
+            for min_samples in tqdm(min_samples_values):
                 # Aplicar DBSCAN
                 dbscan = DBSCAN(eps=eps, min_samples=min_samples)
                 labels = dbscan.fit_predict(self.dataframe)
@@ -577,7 +577,8 @@ class Clustering:
                         "min_samples": min_samples,
                         "silhouette_score": silhouette,
                         "davies_bouldin_score": davies_bouldin,
-                        "cardinality": cardinalidad
+                        "cardinality": cardinalidad,
+                        "num_clusters": len(unique)
                     })
                 
                 else:
@@ -590,17 +591,21 @@ class Clustering:
                     best_eps = eps
                     best_min_samples = min_samples
 
-        # Mostrar las métricas en un DataFrame para análisis posterior
-        metrics_df_dbscan = pd.DataFrame(metrics_results_dbscan).sort_values(by = "silhouette_score", ascending=False)
-        display(metrics_df_dbscan)
+        try:
+            # Mostrar las métricas en un DataFrame para análisis posterior
+            metrics_df_dbscan = pd.DataFrame(metrics_results_dbscan).sort_values(by = "silhouette_score", ascending=False)
+            display(metrics_df_dbscan)
 
-        # Aplicar DBSCAN con los mejores parámetros encontrados
-        print(f"best_eps: {best_eps}, best_min_samples: {best_min_samples}")
-        best_dbscan = DBSCAN(eps=best_eps, min_samples=best_min_samples)
-        best_labels = best_dbscan.fit_predict(self.dataframe)
+            # Aplicar DBSCAN con los mejores parámetros encontrados
+            print(f"best_eps: {best_eps}, best_min_samples: {best_min_samples}")
+            best_dbscan = DBSCAN(eps=best_eps, min_samples=best_min_samples)
+            best_labels = best_dbscan.fit_predict(self.dataframe)
 
-        # Añadir los labels al DataFrame original
-        dataframe_original["clusters_dbscan"] = best_labels
+            # Añadir los labels al DataFrame original
+            dataframe_original["clusters_dbscan"] = best_labels
+
+        except:
+            print("Todos los puntos son ruido o están en el mismo cluster")
 
         return dataframe_original
 
@@ -648,9 +653,13 @@ class Clustering:
         plt.tight_layout()
         plt.show
 
-    def radar_plot(self, metrica, figsize=(8, 8)):
+    def radar_plot(self, metrica, df=None, figsize=(8, 8)):
 
-        df_metrica = self.diccionario_modelos[metrica]
+        try:
+            df_metrica = self.diccionario_modelos[metrica]
+        except:
+            df_metrica=df
+
         col_metrica = f"clusters_{metrica}"
         variables = df_metrica.drop(columns=[col_metrica]).columns
 
@@ -682,4 +691,47 @@ class Clustering:
         # Añadir leyenda y título
         plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
         plt.title('Radar Plot de los Clusters', size=16)
+        plt.show()
+
+    def show_cols_clusters(self, df_inicial, col_cluster_name, figsize=(15,15)):
+        """
+            Devuelve una gráfica con cada columna dividida por clusters
+
+            Params:
+                - df_inical : pd.DataFrame. Es el df original antes de hacer encoding o scaler y con una nueva columna que indique a que cluster pertenece cada registro.
+                - col_cluster_name : str. Es el nombre de la neva columna del df_inicial donde se indica a que cluster pertenece cada registro.
+
+            Returns:
+                - pd.DataFrame. El DataFrame original con una nueva columna para las etiquetas de clusters.
+        """
+
+        col_cat = df_inicial.select_dtypes(exclude=np.number).columns
+        col_num = df_inicial.select_dtypes(include=np.number).columns
+        lista_clusters = df_inicial[col_cluster_name].unique()
+
+        num_nrows = (len(col_cat) + len(col_num)*len(lista_clusters)) / len(col_num)
+
+        fig, axes = plt.subplots(nrows=math.ceil(num_nrows), ncols=len(col_num), figsize=figsize)
+        axes = axes.flat
+
+
+        indice=0
+        for clust in lista_clusters:
+            df_aux = df_inicial[df_inicial[col_cluster_name]==clust]
+
+            for col in col_num:
+                sns.histplot(df_aux, x=col, bins=50, ax=axes[indice])
+                axes[indice].set_title(f"Distribución de {col} para el cluster {clust}")
+                indice+=1
+
+
+        for col in col_cat:
+            print(f"columna: {col}")
+            sns.countplot(df_inicial, x=col, hue=col_cluster_name, ax=axes[indice])
+            indice+=1
+
+        if num_nrows % 2 != 0:
+            fig.delaxes(axes[-1])
+
+        plt.tight_layout()
         plt.show()
