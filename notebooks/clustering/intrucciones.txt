@@ -1,0 +1,64 @@
+Para llevas a cabo a parte de clustering se han ejecutado tres versiones diferentes que son los tres notebooks que se encuentran en la carpeta.
+Las diferencias entre las distintas versiones son las columnas usadas para llevas a cabo el proceso y los resultados obtenidos.
+
+
+---------------------------------------------------------- clustering_v1 -----------------------------------------------------------------------
+
+En esta primera versión elegimos las columnas mas relevantes para poder hacer un buen clustering: ['Segment', 'Market', 'Category', 'Sales', 'Profit', 'Order Priority']
+Rn cuano al EDA: no había nulos, los otliers se mantuvieron, el encoding de las categóricas se hizo co el frecuency y el scaler es el minmax ya que es el que mejor resultados arroja.
+Este EDA es el mismo para los tres notebooks.
+
+Modelos de clustering:
+
+ --> K-means:
+    silhouette_score: 0.61	
+    davies_bouldin_index: 0.65
+    El modelo obtenido genera tres clusters {0: 31273, 1: 9876, 2: 10141}
+
+    Los separa principalmente por Category, las demás variables dentro de cada cluster están bastante equilibradas.
+    En cuanto a Profit de cada cluster si que se observa que el cluster 0 genera profit de -3700 a 5000,
+    el cluster 1 de -7000 a 8400 y el cluster 2 de -2700 a 2300, aunque el cluster 1 tenga un rango bastante amplio los otros dos sí parecen tener sentido.
+
+ --> DBSCAN:
+    eps	: 0.5
+    min_samples: 500
+    silhouette_score: 0.54
+    davies_bouldin_index: 0.80
+    El modelo obtenido genera tres clusters {0: 10141, 1: 9876, 2: 31273}	
+
+    La división de los custers de nuevo se hace en función de Category, para cada cluster una categoria distita.
+    En cuanto al resto de variables esta muy equilibrado entre los clusters.
+    Viendo el Profit de cada cluster el clustar 2 va de -3700 a 5000, cluster 0 de -6500 a 8400 y cluster 1 de -2700 a 2300.
+    Por lo que se parece un pco al anterior.
+
+
+---------------------------------------------------------- clustering_v12 -----------------------------------------------------------------------
+
+En la segunda iteración intentamos reducir los valores para hacer la segmentación y así obtener mejores resultados, manteniendo los que consideramos más importante: ['Market', 'Category', 'Sales', 'Profit']
+El EDA realizado es el mismo que en el notebook anterior.
+
+Modelos de clustering:
+
+ --> K-means:✅
+    silhouette_score: 0.93
+    davies_bouldin_index: 0.13
+    El modelo obtenido genera tres clusters {0: 24654, 1: 20017, 2: 6619}
+
+    La división de los custers de nuevo se hace en función de Category donde el cluster 1 abarca Technology y furniture y el cluster 0 y 1 se dividen Office supplies.
+    Además en cuanto a mercados el cluster dos solo abarca Africa, EMEA y un pooc de Canadá.
+    Viendo el Profit de cada cluster el clustar 0 va de -3700 a 5000, cluster 1 de -6500 a 8400 y cluster 2 de -2000 a 1400.
+    Por lo que de nuevo, en cuanto a profit el cluster 1 tiene un rango muy amplio, sin embargo, tiene sentido pues abarca dos de las tres categorías de producto.
+
+ --> DBSCAN:
+    eps	: 0.5
+    min_samples: 500
+    silhouette_score: 0.86
+    davies_bouldin_index: 0.33
+    El modelo obtenido genera dos clusters {-1: 2, 0: 20015, 1: 31273}
+
+    La división de los custers de nuevo se hace en función de Category donde el cluster 1 abarca Office supplies y el 0 recoge Technology y Furniture Category.
+    En cuanto a mercados esta muy equilibrado entre los clusters.
+    Viendo el Profit de cada cluster el clustar 0 va de -3700 a 5000, cluster 1 de -6500 a 8400 y cluster 2 de -2000 a 1400.
+    Por lo que de nuevo, en cuanto a profit el cluster 1 tiene un rango muy amplio, sin embargo, tiene sentido pues abarca dos de las tres categorías de producto.
+
+
