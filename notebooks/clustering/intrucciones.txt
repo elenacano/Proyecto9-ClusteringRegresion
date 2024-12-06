@@ -62,3 +62,6 @@ Modelos de clustering:
     Por lo que de nuevo, en cuanto a profit el cluster 1 tiene un rango muy amplio, sin embargo, tiene sentido pues abarca dos de las tres categorías de producto.
 
 
+Finalmente viendo tanto las métricas como los clusters nos decantamos por usar el k-means del segundo modelo, ya que son los clusters que parecen tener más sentido 
+en cuanto a su división. Este cluster a diferencia de el modelo 1 donde para cada categoría crea un cluster tenemos que hay un cluster que abarca dos categorías y los otros 
+dos se reparten la restante y a diferencia del dbsacn del modelo2 donde hay 4 clusters donde uno solapa a otro awuí si que hay mayores diferencias entre clusters.
