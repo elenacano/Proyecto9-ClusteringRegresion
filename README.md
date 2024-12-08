@@ -91,5 +91,6 @@ Para visualizar el proyecto en tu máquina local, sigue estos pasos:
    cd Proyecto8-PrediccionRetencionEmpleados
 
 2. **Ejecutar o visualizar los archivos**:
+
    Para ver todo el ciclo de creación de principio a fin se debe comenzar por a carpeta de clustering y posteriorente con la carpeta de regresion_lositica, dentro de esta accederemos al Cluster_X deseado y podremos visualizar o ejecutar los archivos en el orden deseado.
 
