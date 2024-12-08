@@ -67,8 +67,6 @@ Este proyecto usa Python 3.11 y requiere las siguientes bibliotecas:
 - [pandas](https://pandas.pydata.org/docs/reference/frame.html)
 - [matplotlib.pyplot](https://matplotlib.org/3.5.3/api/_as_gen/matplotlib.pyplot.html)
 - [seaborn](https://seaborn.pydata.org/)
-- [shap](https://shap.readthedocs.io/en/latest/)
-- [flask](https://flask.palletsprojects.com/en/stable/)
 - [scikitlearn](https://scikit-learn.org/stable/)
 - [imblearn](https://imbalanced-learn.org/stable/)
 - [itertools](https://docs.python.org/3/library/itertools.html)
@@ -88,7 +86,7 @@ Para visualizar el proyecto en tu máquina local, sigue estos pasos:
    
 2. **Navega a la carpeta del proyecto**:
    ```bash
-   cd Proyecto8-PrediccionRetencionEmpleados
+   cd Proyecto9-ClusteringRegresion
 
 2. **Ejecutar o visualizar los archivos**:
 
