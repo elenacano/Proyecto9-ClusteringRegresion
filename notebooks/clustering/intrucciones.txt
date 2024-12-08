@@ -1,4 +1,4 @@
-Para llevas a cabo a parte de clustering se han ejecutado tres versiones diferentes que son los tres notebooks que se encuentran en la carpeta.
+Para llevas a cabo a parte de clustering se han ejecutado dos versiones diferentes que son los dos notebooks que se encuentran en la carpeta.
 Las diferencias entre las distintas versiones son las columnas usadas para llevas a cabo el proceso y los resultados obtenidos.
 
 
