@@ -95,7 +95,7 @@ class Analisis_Visual_Encoding:
                           ax=axes[indice], 
                           errorbar= 'ci')
             
-            axes[indice].tick_params(axis="x", rotation=45)
+            axes[indice].tick_params(axis="x", rotation=90)
             #axes[indice].get_legend().remove() # eliminamos la leyenda de las gráficas
 
         for indice in range(len(self.lista_variables_categorias), len(axes)):

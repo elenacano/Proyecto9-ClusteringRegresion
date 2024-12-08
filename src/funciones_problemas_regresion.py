@@ -87,6 +87,7 @@ class ProblemaRegresion():
 
         modelo_grid = grid_search_arbol.best_estimator_
         modelo_grid.fit(self.X_train, self.y_train)
+        self.modelo = modelo_grid
 
         self.y_train_pred = modelo_grid.predict(self.X_train)
         self.y_test_pred = modelo_grid.predict(self.X_test)
@@ -110,6 +111,12 @@ class ProblemaRegresion():
         plt.xlabel(f"{self.variable_respuesta}")
         plt.ylabel(f"{self.variable_respuesta} Predicted")
         plt.show()
+
+    def importancias_variables(self):
+        importancias = self.modelo.feature_importances_
+        importancia_rf = pd.DataFrame({"Predictor": self.X_train.columns, "Importancia": importancias})
+        importancia_rf = importancia_rf.sort_values(by="Importancia", ascending=False)
+        sns.barplot(y = "Predictor", x = "Importancia", data = importancia_rf);
 
 
 # class ArbolesDecision(ProblemaRegresion):
